@@ -42,6 +42,19 @@ jobs:
         echo "android.enableJetifier=false" >> gradle.properties
         echo "android.jetifier.ignorelist=bcprov-jdk18on" >> gradle.properties
         
+    # LANGKAH BARU: Memperbaiki konflik versi Kotlin
+    - name: Fix Kotlin Dependency Conflict
+      run: |
+        cd android/app
+        sed -i '/dependencies {/i \
+        configurations.all {\
+            resolutionStrategy {\
+                force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"\
+                force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"\
+            }\
+        }\
+        ' build.gradle
+        
     - name: Force Clear Gradle Cache
       run: |
         rm -rf ~/.gradle/caches
