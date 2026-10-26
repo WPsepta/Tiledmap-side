@@ -25,16 +25,20 @@ jobs:
         npx cap add android
         npx cap sync
         
-    # PERBAIKAN 1: Gunakan Java 21
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '21'
         
-    # PERBAIKAN 2: Bersihkan cache Gradle sebelum build
-    - name: Clean Gradle Cache
+    - name: Configure Gradle Properties
       run: |
+        cd android
+        echo "android.jetifier.ignorelist=bcprov-jdk18on" >> gradle.properties
+        
+    - name: Force Clear Gradle Cache
+      run: |
+        rm -rf ~/.gradle/caches
         cd android
         ./gradlew clean
         
