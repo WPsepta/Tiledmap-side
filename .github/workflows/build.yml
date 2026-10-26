@@ -25,17 +25,24 @@ jobs:
         npx cap add android
         npx cap sync
         
+    # PERBAIKAN 1: Gunakan Java 21
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17'
+        java-version: '21'
+        
+    # PERBAIKAN 2: Bersihkan cache Gradle sebelum build
+    - name: Clean Gradle Cache
+      run: |
+        cd android
+        ./gradlew clean
         
     - name: Build APK
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --no-daemon
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
